@@ -65,7 +65,8 @@ Some prompts to answer:
 - `valence` — number 0–1, how sad or happy the song sounds
 - `danceability` — number 0–1, how easy the song is to move to
 - `acousticness` — number 0–1, how acoustic vs. electronic it sounds
-  Simple description of each so it's easy to picture:
+
+Simple description of each so it's easy to picture:
 
 genre & mood — words, not numbers. Either they match the user's preference or they don't.
 energy, valence, danceability, acousticness — numbers between 0 and 1. Think of 0 and 1 as opposite ends of a dial (calm ↔ intense, sad ↔ happy, still ↔ danceable, electronic ↔ acoustic).
@@ -77,7 +78,8 @@ tempo_bpm — the only feature that isn't 0–1, it's a real speed measurement (
 - `favorite_mood` — the one mood this user prefers, like happy or chill
 - `target_energy` — number 0–1, the energy level this user wants
 - `likes_acoustic` — yes/no, does this user prefer acoustic-sounding songs
-  Simple description of each:
+
+Simple description of each:
 
 favorite_genre & favorite_mood — words, not numbers. Just what the user says they like.
 target_energy — a target, not a maximum. A user with target_energy = 0.8 wants songs near 0.8, not necessarily the highest-energy songs available.
