@@ -186,6 +186,8 @@ Run the starter tests with:
 
 ```bash
 pytest
+
+python -m pytest
 ```
 
 You can add more tests in `tests/test_recommender.py`.

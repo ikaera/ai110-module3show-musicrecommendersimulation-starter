@@ -76,3 +76,24 @@ Add a "Diversity Penalty" so the recommender doesn't fill the top results with m
 - First run had a bug: even with `diversity_penalty=0.0` (the default, meaning "off"), the code still appended a `"diversity penalty, repeated artist (-0.0)"` reason to any song that happened to share an artist with an earlier pick. I caught this by reading the actual terminal output and noticing the note showing up when it shouldn't have. Fixed by requiring `diversity_penalty` to be truthy (nonzero) before applying or reporting the penalty, not just checking if the artist was reused.
 - Re-ran and confirmed: without the penalty, `LoRoom` takes 2 of the top 5 spots for "Chill Lofi" (`Midnight Coding`, `Focus Flow`). With `diversity_penalty=2.0`, `Focus Flow` drops out of the top 5 entirely and is replaced by `Wildflower Trail` (a different artist) — the re-ranking is working as intended.
 - Ran `pytest` — both existing tests still pass, since they don't use the new parameter and the default keeps old behavior unchanged.
+
+---
+
+## Visual Summary Table (Challenge 4)
+
+> Document the prompt used to format terminal output as a table, and what came out of it.
+
+**Prompt used:**
+
+"Improve the readability of the terminal output — suggest a way to use a library like `tabulate` (or ASCII formatting) to display the top recommendations. The table must include the 'reasons' for each score, not just title/score."
+
+**What did the agent generate or change?**
+
+- Added `tabulate` to `requirements.txt` and installed it.
+- Added a `print_table()` helper in `src/main.py` that turns each `(song, score, explanation)` result into a row and prints it with `tabulate(..., tablefmt="grid", maxcolwidths=[..., 60])` — columns: `#`, `Title`, `Artist`, `Score`, `Reasons`. The `Reasons` column wraps at 60 characters so long explanation strings don't blow out the table width.
+- Replaced every manual `print(...)` loop in `main()` with a single `print_table(title, recommendations)` call.
+
+**What did you verify or fix manually?**
+
+- Ran `python -m src.main` and visually checked the grid table renders correctly, reasons wrap instead of overflowing, and every profile/mode/diversity demo still prints its own table with the right data.
+- Ran `pytest` — still passing, since this change only touched output formatting, not scoring logic.
