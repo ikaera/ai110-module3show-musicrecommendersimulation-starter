@@ -113,6 +113,22 @@ Final score — think of it like a report card. Each trait gives a small grade, 
 
 ---
 
+### Algorithm Recipe (finalized weights)
+
+| Check | Type | Points | Formula |
+|---|---|---|---|
+| genre match | yes/no | +2.0 | `2.0 if song.genre == favorite_genre else 0` |
+| mood match | yes/no | +1.0 | `1.0 if song.mood == favorite_mood else 0` |
+| energy closeness | numeric | up to +1.5 | `1.5 * (1 - abs(song.energy - target_energy))` |
+| valence closeness | numeric | up to +1.0 | `1.0 * (1 - abs(song.valence - target_valence))` |
+| acousticness preference | yes/no | +0.5 | `0.5 if (likes_acoustic and acousticness > 0.5) or (not likes_acoustic and acousticness <= 0.5) else 0` |
+
+Max possible score ≈ 6.0. Genre counts double mood because it's the strongest taste signal; the closeness formulas reward being *near* the target, not just high or low.
+
+**Expected bias:** genre is weighted 2x mood, so the system may over-recommend a song's genre match even when mood is the better fit — e.g., a sad rock song could outscore a happy song from a different genre. Worth watching for in Phase 4 evaluation.
+
+---
+
 ### Diagram: How a recommendation gets made
 
     USER PROFILE                 SONG
