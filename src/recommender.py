@@ -47,10 +47,7 @@ class Recommender:
         return "Explanation placeholder"
 
 def load_songs(csv_path: str) -> List[Dict]:
-    """
-    Loads songs from a CSV file.
-    Required by src/main.py
-    """
+    """Reads songs.csv into a list of dicts with numeric fields converted to int/float."""
     songs = []
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -65,10 +62,7 @@ def load_songs(csv_path: str) -> List[Dict]:
     return songs
 
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """
-    Scores a single song against user preferences.
-    Required by recommend_songs() and src/main.py
-    """
+    """Scores a song against user preferences using the weighted Algorithm Recipe; returns (score, reasons)."""
     score = 0.0
     reasons = []
 
@@ -102,10 +96,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     return score, reasons
 
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
-    """
-    Functional implementation of the recommendation logic.
-    Required by src/main.py
-    """
+    """Scores every song, ranks by score, and returns the top k as (song, score, explanation)."""
     scored = [(song, *score_song(user_prefs, song)) for song in songs]
     ranked = sorted(scored, key=lambda item: item[1], reverse=True)
     top_k = ranked[:k]

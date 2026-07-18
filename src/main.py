@@ -25,15 +25,13 @@ def main() -> None:
         "likes_acoustic": False,
     }
 
-    recommendations = recommend_songs(user_prefs, songs, k=5)
+    k = 5
+    recommendations = recommend_songs(user_prefs, songs, k=k)
 
-    print("\nTop recommendations:\n")
-    for rec in recommendations:
-        # You decide the structure of each returned item.
-        # A common pattern is: (song, score, explanation)
-        song, score, explanation = rec
-        print(f"{song['title']} - Score: {score:.2f}")
-        print(f"Because: {explanation}")
+    print(f"\nTop {k} recommendations for profile {user_prefs}:\n")
+    for i, (song, score, explanation) in enumerate(recommendations, start=1):
+        print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
+        print(f"   Because: {explanation}")
         print()
 
 
