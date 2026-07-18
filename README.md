@@ -115,15 +115,15 @@ Final score — think of it like a report card. Each trait gives a small grade, 
 
 ### Algorithm Recipe (finalized weights)
 
-| Check | Type | Points | Formula |
-|---|---|---|---|
-| genre match | yes/no | +2.0 | `2.0 if song.genre == favorite_genre else 0` |
-| mood match | yes/no | +1.0 | `1.0 if song.mood == favorite_mood else 0` |
-| energy closeness | numeric | up to +1.5 | `1.5 * (1 - abs(song.energy - target_energy))` |
-| valence closeness | numeric | up to +1.0 | `1.0 * (1 - abs(song.valence - target_valence))` |
-| acousticness preference | yes/no | +0.5 | `0.5 if (likes_acoustic and acousticness > 0.5) or (not likes_acoustic and acousticness <= 0.5) else 0` |
+| Check                   | Type    | Points     | Formula                                                                                                 |
+| ----------------------- | ------- | ---------- | ------------------------------------------------------------------------------------------------------- |
+| genre match             | yes/no  | +2.0       | `2.0 if song.genre == favorite_genre else 0`                                                            |
+| mood match              | yes/no  | +1.0       | `1.0 if song.mood == favorite_mood else 0`                                                              |
+| energy closeness        | numeric | up to +1.5 | `1.5 * (1 - abs(song.energy - target_energy))`                                                          |
+| valence closeness       | numeric | up to +1.0 | `1.0 * (1 - abs(song.valence - target_valence))`                                                        |
+| acousticness preference | yes/no  | +0.5       | `0.5 if (likes_acoustic and acousticness > 0.5) or (not likes_acoustic and acousticness <= 0.5) else 0` |
 
-Max possible score ≈ 6.0. Genre counts double mood because it's the strongest taste signal; the closeness formulas reward being *near* the target, not just high or low.
+Max possible score ≈ 6.0. Genre counts double mood because it's the strongest taste signal; the closeness formulas reward being _near_ the target, not just high or low.
 
 **Expected bias:** genre is weighted 2x mood, so the system may over-recommend a song's genre match even when mood is the better fit — e.g., a sad rock song could outscore a happy song from a different genre. Worth watching for in Phase 4 evaluation.
 
@@ -221,13 +221,121 @@ Top 5 recommendations for profile {'genre': 'pop', 'mood': 'happy', 'energy': 0.
 
 ---
 
-## Experiments You Tried
+## Experiments I Tried
 
 Use this section to document the experiments you ran. For example:
 
 - What happened when you changed the weight on genre from 2.0 to 0.5
 - What happened when you added tempo or valence to the score
 - How did your system behave for different types of users
+
+### Stress Test: 5 Profiles
+
+Ran `python -m src.main` with 3 standard profiles and 2 adversarial (edge-case) profiles.
+
+```
+=== Profile: High-Energy Pop ===
+Top 5 for {'genre': 'pop', 'mood': 'happy', 'energy': 0.9, 'valence': 0.85, 'likes_acoustic': False}:
+
+1. Sunrise City by Neon Echo - Score: 5.87
+   Because: genre match (+2.0), mood match (+1.0), energy closeness (+1.38), valence closeness (+0.99), acousticness preference match (+0.5)
+
+2. Gym Hero by Max Pulse - Score: 4.88
+   Because: genre match (+2.0), energy closeness (+1.46), valence closeness (+0.92), acousticness preference match (+0.5)
+
+3. Rooftop Lights by Indigo Parade - Score: 3.75
+   Because: mood match (+1.0), energy closeness (+1.29), valence closeness (+0.96), acousticness preference match (+0.5)
+
+4. Neon Hearts by Cherry Static - Score: 2.91
+   Because: energy closeness (+1.44), valence closeness (+0.97), acousticness preference match (+0.5)
+
+5. Fuego Nights by Rio Lumbre - Score: 2.91
+   Because: energy closeness (+1.41), valence closeness (+1.00), acousticness preference match (+0.5)
+```
+
+```
+=== Profile: Chill Lofi ===
+Top 5 for {'genre': 'lofi', 'mood': 'chill', 'energy': 0.3, 'valence': 0.5, 'likes_acoustic': True}:
+
+1. Library Rain by Paper Lanterns - Score: 5.83
+   Because: genre match (+2.0), mood match (+1.0), energy closeness (+1.42), valence closeness (+0.90), acousticness preference match (+0.5)
+
+2. Midnight Coding by LoRoom - Score: 5.76
+   Because: genre match (+2.0), mood match (+1.0), energy closeness (+1.32), valence closeness (+0.94), acousticness preference match (+0.5)
+
+3. Focus Flow by LoRoom - Score: 4.76
+   Because: genre match (+2.0), energy closeness (+1.35), valence closeness (+0.91), acousticness preference match (+0.5)
+
+4. Spacewalk Thoughts by Orbit Bloom - Score: 3.82
+   Because: mood match (+1.0), energy closeness (+1.47), valence closeness (+0.85), acousticness preference match (+0.5)
+
+5. Old Photographs by Delta Hollow - Score: 2.93
+   Because: energy closeness (+1.48), valence closeness (+0.95), acousticness preference match (+0.5)
+```
+
+```
+=== Profile: Deep Intense Rock ===
+Top 5 for {'genre': 'rock', 'mood': 'intense', 'energy': 0.9, 'valence': 0.4, 'likes_acoustic': False}:
+
+1. Storm Runner by Voltline - Score: 5.90
+   Because: genre match (+2.0), mood match (+1.0), energy closeness (+1.48), valence closeness (+0.92), acousticness preference match (+0.5)
+
+2. Gym Hero by Max Pulse - Score: 3.58
+   Because: mood match (+1.0), energy closeness (+1.46), valence closeness (+0.63), acousticness preference match (+0.5)
+
+3. Chrome Pulse by Kilowatt - Score: 2.98
+   Because: energy closeness (+1.48), valence closeness (+1.00), acousticness preference match (+0.5)
+
+4. Warehouse Signal by Dronefield - Score: 2.95
+   Because: energy closeness (+1.50), valence closeness (+0.95), acousticness preference match (+0.5)
+
+5. Riot Anthem by Static Fangs - Score: 2.94
+   Because: energy closeness (+1.46), valence closeness (+0.98), acousticness preference match (+0.5)
+```
+
+```
+=== Profile: Adversarial: Energetic but Sad ===
+Top 5 for {'genre': 'rock', 'mood': 'sad', 'energy': 0.9, 'valence': 0.2, 'likes_acoustic': False}:
+
+1. Storm Runner by Voltline - Score: 4.71
+   Because: genre match (+2.0), energy closeness (+1.48), valence closeness (+0.72), acousticness preference match (+0.5)
+
+2. Slow Fade by Static Fangs - Score: 3.40
+   Because: mood match (+1.0), energy closeness (+0.98), valence closeness (+0.92), acousticness preference match (+0.5)
+
+3. Warehouse Signal by Dronefield - Score: 2.85
+   Because: energy closeness (+1.50), valence closeness (+0.85), acousticness preference match (+0.5)
+
+4. Iron Choir by Gravebound - Score: 2.84
+   Because: energy closeness (+1.40), valence closeness (+0.95), acousticness preference match (+0.5)
+
+5. Chrome Pulse by Kilowatt - Score: 2.79
+   Because: energy closeness (+1.48), valence closeness (+0.80), acousticness preference match (+0.5)
+```
+
+Notable: `Storm Runner` (mood = intense, not sad) still beat `Slow Fade` (actual mood = sad match). Genre match (+2.0) plus energy closeness outweighed the one point for a correct mood match — a sign genre may be weighted too heavily relative to mood.
+
+```
+=== Profile: Adversarial: Unknown Genre ===
+Top 5 for {'genre': 'grunge', 'mood': 'euphoric', 'energy': 0.5, 'valence': 0.5, 'likes_acoustic': False}:
+
+1. Slow Fade by Static Fangs - Score: 2.71
+   Because: energy closeness (+1.42), valence closeness (+0.78), acousticness preference match (+0.5)
+
+2. Island Sway by Sun Ration - Score: 2.67
+   Because: energy closeness (+1.41), valence closeness (+0.76), acousticness preference match (+0.5)
+
+3. Broken Streetlight by Cutter Row - Score: 2.65
+   Because: energy closeness (+1.23), valence closeness (+0.92), acousticness preference match (+0.5)
+
+4. Night Drive Loop by Neon Echo - Score: 2.62
+   Because: energy closeness (+1.12), valence closeness (+0.99), acousticness preference match (+0.5)
+
+5. Sunset Boulevard by Rio Lumbre - Score: 2.54
+   Because: energy closeness (+1.32), valence closeness (+0.72), acousticness preference match (+0.5)
+```
+
+Notable: `genre: "grunge"` doesn't exist in the catalog, so genre and mood checks never fire — no crash, the system just falls back to ranking on energy/valence/acousticness closeness alone. Confirms the scoring is safe against unknown categorical values.
 
 ---
 
