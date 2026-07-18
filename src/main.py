@@ -9,6 +9,8 @@ You will implement the functions in recommender.py:
 - recommend_songs
 """
 
+from tabulate import tabulate
+
 from .recommender import load_songs, recommend_songs, STRATEGIES
 
 PROFILES = {
@@ -29,6 +31,16 @@ PROFILES = {
 }
 
 
+def print_table(title: str, recommendations) -> None:
+    """Prints a list of (song, score, explanation) recommendations as a formatted table with reasons."""
+    rows = [
+        [i, song["title"], song["artist"], f"{score:.2f}", explanation]
+        for i, (song, score, explanation) in enumerate(recommendations, start=1)
+    ]
+    print(f"\n=== {title} ===\n")
+    print(tabulate(rows, headers=["#", "Title", "Artist", "Score", "Reasons"], tablefmt="grid", maxcolwidths=[None, None, None, None, 60]))
+
+
 def main() -> None:
     songs = load_songs("data/songs.csv")
     print(f"Loaded songs: {len(songs)}")
@@ -36,32 +48,19 @@ def main() -> None:
     k = 5
     for name, user_prefs in PROFILES.items():
         recommendations = recommend_songs(user_prefs, songs, k=k)
-        print(f"\n=== Profile: {name} ===")
-        print(f"Top {k} for {user_prefs}:\n")
-        for i, (song, score, explanation) in enumerate(recommendations, start=1):
-            print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
-            print(f"   Because: {explanation}")
-            print()
+        print_table(f"Profile: {name}", recommendations)
 
     # Challenge 2: same profile, ranked under each scoring mode (Strategy pattern)
     mode_demo_profile = PROFILES["Deep Intense Rock"]
     for mode in STRATEGIES:
         recommendations = recommend_songs(mode_demo_profile, songs, k=3, mode=mode)
-        print(f"\n=== Mode: {mode} (profile: Deep Intense Rock) ===\n")
-        for i, (song, score, explanation) in enumerate(recommendations, start=1):
-            print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
-            print(f"   Because: {explanation}")
-            print()
+        print_table(f"Mode: {mode} (profile: Deep Intense Rock)", recommendations)
 
     # Challenge 3: Chill Lofi without vs. with a diversity penalty (LoRoom has 2 songs in the unpenalized top 5)
     diversity_demo_profile = PROFILES["Chill Lofi"]
     for label, penalty in [("without diversity penalty", 0.0), ("with diversity penalty", 2.0)]:
         recommendations = recommend_songs(diversity_demo_profile, songs, k=5, diversity_penalty=penalty)
-        print(f"\n=== Chill Lofi, {label} ===\n")
-        for i, (song, score, explanation) in enumerate(recommendations, start=1):
-            print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
-            print(f"   Because: {explanation}")
-            print()
+        print_table(f"Chill Lofi, {label}", recommendations)
 
 
 if __name__ == "__main__":
