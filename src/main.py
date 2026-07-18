@@ -19,6 +19,13 @@ PROFILES = {
     "Adversarial: Energetic but Sad": {"genre": "rock", "mood": "sad", "energy": 0.9, "valence": 0.2, "likes_acoustic": False},
     # Adversarial: genre with zero matches in the catalog - tests fallback to numeric-only scoring
     "Adversarial: Unknown Genre": {"genre": "grunge", "mood": "euphoric", "energy": 0.5, "valence": 0.5, "likes_acoustic": False},
+    # Uses the Challenge 1 extended attributes: decade, popularity, language, instrumentalness, liveness, secondary mood, explicit filter
+    "Clean Mainstream 2020s": {
+        "genre": "edm", "mood": "energetic", "energy": 0.9, "valence": 0.8, "likes_acoustic": False,
+        "preferred_decade": "2020s", "target_popularity": 90, "allow_explicit": False,
+        "preferred_language": "english", "target_instrumentalness": 0.2, "target_liveness": 0.15,
+        "preferred_secondary_mood": "electric",
+    },
 }
 
 

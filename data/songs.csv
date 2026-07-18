@@ -1,39 +1,39 @@
-id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
-11,Broken Streetlight,Cutter Row,hiphop,moody,0.68,94,0.42,0.85,0.15
-12,Iron Choir,Gravebound,metal,angry,0.97,168,0.25,0.55,0.03
-13,Moonlit Sonata Redux,Elias Voss,classical,peaceful,0.20,66,0.55,0.22,0.95
-14,Dirt Road Home,Sable Creek,country,nostalgic,0.48,102,0.68,0.61,0.55
-15,Pulse Overdrive,Kilowatt,edm,energetic,0.95,140,0.80,0.90,0.04
-16,Island Sway,Sun Ration,reggae,relaxed,0.44,86,0.74,0.69,0.42
-17,Whiskey Blue,Delta Hollow,blues,sad,0.33,70,0.30,0.44,0.68
-18,Groove Machine,Funk Theory,funk,playful,0.79,112,0.83,0.91,0.20
-19,Neon Hearts,Cherry Static,kpop,uplifting,0.86,128,0.88,0.86,0.12
-20,Wildflower Trail,Amber Hollow,folk,dreamy,0.31,76,0.62,0.38,0.90
-21,Warehouse Signal,Dronefield,techno,dark,0.90,150,0.35,0.80,0.06
-22,Velvet Sky,Marlowe James,soul,romantic,0.39,68,0.72,0.50,0.63
-23,Fuego Nights,Rio Lumbre,latin,energetic,0.84,118,0.85,0.93,0.18
-24,Riot Anthem,Static Fangs,punk,angry,0.93,174,0.38,0.63,0.05
-25,Empty Platform,Gray Signal,ambient,sad,0.18,58,0.22,0.20,0.94
-26,Golden Hour,Amber Hollow,folk,happy,0.52,96,0.80,0.55,0.72
-27,Chrome Pulse,Kilowatt,edm,dark,0.89,144,0.40,0.87,0.08
-28,Old Photographs,Delta Hollow,blues,nostalgic,0.29,64,0.45,0.35,0.80
-29,Battle Hymn,Gravebound,metal,epic,0.95,160,0.60,0.58,0.05
-30,Silk Curtain,Marlowe James,soul,dreamy,0.36,70,0.66,0.48,0.70
-31,Concrete Bloom,Cutter Row,hiphop,energetic,0.81,98,0.58,0.88,0.10
-32,String Theory,Elias Voss,classical,melancholic,0.24,60,0.35,0.18,0.97
-33,Sunset Boulevard,Rio Lumbre,latin,romantic,0.62,100,0.78,0.75,0.30
-34,Static Bloomtown,Dronefield,techno,energetic,0.92,148,0.55,0.85,0.05
-35,Backroad Ballad,Sable Creek,country,peaceful,0.34,84,0.70,0.45,0.60
-36,Sunday Sermon,Gospel Halo,gospel,uplifting,0.71,108,0.90,0.68,0.40
-37,Tidewater,Sun Ration,reggae,peaceful,0.30,74,0.65,0.50,0.66
-38,Slow Fade,Static Fangs,punk,sad,0.55,90,0.28,0.48,0.25
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,popularity,release_decade,explicit,language,instrumentalness,liveness,secondary_mood
+1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18,88,2010s,False,english,0.2,0.3,euphoric
+2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71,76,2010s,False,english,0.6,0.2,wistful
+3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10,76,1990s,False,english,0.2,0.5,aggressive
+4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86,75,2010s,False,english,0.6,0.2,wistful
+5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05,91,2010s,False,english,0.2,0.3,aggressive
+6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92,69,2010s,False,instrumental,0.85,0.1,wistful
+7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89,76,1970s,False,english,0.5,0.65,tender
+8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22,79,2010s,False,english,0.2,0.15,brooding
+9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78,76,2010s,False,english,0.6,0.2,determined
+10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35,89,2010s,False,english,0.2,0.3,euphoric
+11,Broken Streetlight,Cutter Row,hiphop,moody,0.68,94,0.42,0.85,0.15,82,2020s,True,english,0.2,0.3,brooding
+12,Iron Choir,Gravebound,metal,angry,0.97,168,0.25,0.55,0.03,67,1990s,True,english,0.2,0.3,furious
+13,Moonlit Sonata Redux,Elias Voss,classical,peaceful,0.20,66,0.55,0.22,0.95,60,2000s,False,instrumental,0.9,0.3,serene
+14,Dirt Road Home,Sable Creek,country,nostalgic,0.48,102,0.68,0.61,0.55,78,1970s,False,english,0.2,0.55,bittersweet
+15,Pulse Overdrive,Kilowatt,edm,energetic,0.95,140,0.80,0.90,0.04,92,2020s,False,english,0.2,0.15,electric
+16,Island Sway,Sun Ration,reggae,relaxed,0.44,86,0.74,0.69,0.42,82,2020s,False,english,0.2,0.3,tender
+17,Whiskey Blue,Delta Hollow,blues,sad,0.33,70,0.30,0.44,0.68,64,1970s,False,english,0.2,0.6,aching
+18,Groove Machine,Funk Theory,funk,playful,0.79,112,0.83,0.91,0.20,93,2020s,False,english,0.2,0.3,cheeky
+19,Neon Hearts,Cherry Static,kpop,uplifting,0.86,128,0.88,0.86,0.12,92,2020s,False,korean,0.2,0.2,triumphant
+20,Wildflower Trail,Amber Hollow,folk,dreamy,0.31,76,0.62,0.38,0.90,68,1970s,False,english,0.2,0.6,ethereal
+21,Warehouse Signal,Dronefield,techno,dark,0.90,150,0.35,0.80,0.06,79,2020s,False,instrumental,0.7,0.1,ominous
+22,Velvet Sky,Marlowe James,soul,romantic,0.39,68,0.72,0.50,0.63,74,1970s,False,english,0.2,0.3,yearning
+23,Fuego Nights,Rio Lumbre,latin,energetic,0.84,118,0.85,0.93,0.18,94,2020s,False,spanish,0.2,0.3,electric
+24,Riot Anthem,Static Fangs,punk,angry,0.93,174,0.38,0.63,0.05,73,1990s,True,english,0.2,0.3,furious
+25,Empty Platform,Gray Signal,ambient,sad,0.18,58,0.22,0.20,0.94,52,2010s,False,instrumental,0.85,0.1,aching
+26,Golden Hour,Amber Hollow,folk,happy,0.52,96,0.80,0.55,0.72,78,1970s,False,english,0.2,0.6,euphoric
+27,Chrome Pulse,Kilowatt,edm,dark,0.89,144,0.40,0.87,0.08,83,2020s,False,english,0.2,0.15,ominous
+28,Old Photographs,Delta Hollow,blues,nostalgic,0.29,64,0.45,0.35,0.80,63,1970s,False,english,0.2,0.6,bittersweet
+29,Battle Hymn,Gravebound,metal,epic,0.95,160,0.60,0.58,0.05,75,1990s,True,english,0.2,0.3,triumphant
+30,Silk Curtain,Marlowe James,soul,dreamy,0.36,70,0.66,0.48,0.70,72,1970s,False,english,0.2,0.3,ethereal
+31,Concrete Bloom,Cutter Row,hiphop,energetic,0.81,98,0.58,0.88,0.10,87,2020s,True,english,0.2,0.3,electric
+32,String Theory,Elias Voss,classical,melancholic,0.24,60,0.35,0.18,0.97,54,2000s,False,instrumental,0.9,0.3,forlorn
+33,Sunset Boulevard,Rio Lumbre,latin,romantic,0.62,100,0.78,0.75,0.30,86,2020s,False,spanish,0.2,0.3,yearning
+34,Static Bloomtown,Dronefield,techno,energetic,0.92,148,0.55,0.85,0.05,85,2020s,False,instrumental,0.7,0.1,electric
+35,Backroad Ballad,Sable Creek,country,peaceful,0.34,84,0.70,0.45,0.60,72,1970s,False,english,0.2,0.55,serene
+36,Sunday Sermon,Gospel Halo,gospel,uplifting,0.71,108,0.90,0.68,0.40,85,1970s,False,english,0.2,0.6,triumphant
+37,Tidewater,Sun Ration,reggae,peaceful,0.30,74,0.65,0.50,0.66,73,2020s,False,english,0.2,0.3,serene
+38,Slow Fade,Static Fangs,punk,sad,0.55,90,0.28,0.48,0.25,65,1990s,True,english,0.2,0.3,aching

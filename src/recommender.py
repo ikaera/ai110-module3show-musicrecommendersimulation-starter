@@ -58,6 +58,10 @@ def load_songs(csv_path: str) -> List[Dict]:
             row["valence"] = float(row["valence"])
             row["danceability"] = float(row["danceability"])
             row["acousticness"] = float(row["acousticness"])
+            row["popularity"] = float(row["popularity"])
+            row["explicit"] = row["explicit"] == "True"
+            row["instrumentalness"] = float(row["instrumentalness"])
+            row["liveness"] = float(row["liveness"])
             songs.append(row)
     return songs
 
@@ -92,6 +96,44 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         if matches:
             score += 0.5
             reasons.append("acousticness preference match (+0.5)")
+
+    preferred_decade = user_prefs.get("preferred_decade")
+    if preferred_decade is not None and song["release_decade"] == preferred_decade:
+        score += 0.5
+        reasons.append("release decade match (+0.5)")
+
+    target_popularity = user_prefs.get("target_popularity")
+    if target_popularity is not None:
+        points = 1.0 * (1 - abs(song["popularity"] - target_popularity) / 100)
+        score += points
+        reasons.append(f"popularity closeness (+{points:.2f})")
+
+    preferred_language = user_prefs.get("preferred_language")
+    if preferred_language is not None and song["language"] == preferred_language:
+        score += 0.5
+        reasons.append("language match (+0.5)")
+
+    target_instrumentalness = user_prefs.get("target_instrumentalness")
+    if target_instrumentalness is not None:
+        points = 0.5 * (1 - abs(song["instrumentalness"] - target_instrumentalness))
+        score += points
+        reasons.append(f"instrumentalness closeness (+{points:.2f})")
+
+    target_liveness = user_prefs.get("target_liveness")
+    if target_liveness is not None:
+        points = 0.5 * (1 - abs(song["liveness"] - target_liveness))
+        score += points
+        reasons.append(f"liveness closeness (+{points:.2f})")
+
+    preferred_secondary_mood = user_prefs.get("preferred_secondary_mood")
+    if preferred_secondary_mood is not None and song["secondary_mood"] == preferred_secondary_mood:
+        score += 0.5
+        reasons.append("secondary mood match (+0.5)")
+
+    allow_explicit = user_prefs.get("allow_explicit")
+    if allow_explicit is not None and song["explicit"] and not allow_explicit:
+        score -= 1.0
+        reasons.append("explicit content penalty (-1.0)")
 
     return score, reasons
 
