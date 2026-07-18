@@ -53,6 +53,16 @@ def main() -> None:
             print(f"   Because: {explanation}")
             print()
 
+    # Challenge 3: Chill Lofi without vs. with a diversity penalty (LoRoom has 2 songs in the unpenalized top 5)
+    diversity_demo_profile = PROFILES["Chill Lofi"]
+    for label, penalty in [("without diversity penalty", 0.0), ("with diversity penalty", 2.0)]:
+        recommendations = recommend_songs(diversity_demo_profile, songs, k=5, diversity_penalty=penalty)
+        print(f"\n=== Chill Lofi, {label} ===\n")
+        for i, (song, score, explanation) in enumerate(recommendations, start=1):
+            print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
+            print(f"   Because: {explanation}")
+            print()
+
 
 if __name__ == "__main__":
     main()

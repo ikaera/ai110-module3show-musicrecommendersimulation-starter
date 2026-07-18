@@ -151,10 +151,27 @@ def score_song(user_prefs: Dict, song: Dict, weights: Optional[Dict] = None) -> 
 
     return score, reasons
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, mode: str = "balanced") -> List[Tuple[Dict, float, str]]:
-    """Scores every song under the chosen strategy's weights, ranks, and returns the top k as (song, score, explanation)."""
+def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, mode: str = "balanced", diversity_penalty: float = 0.0) -> List[Tuple[Dict, float, str]]:
+    """Scores every song under the chosen strategy's weights, greedily re-ranks with a same-artist diversity penalty, and returns the top k as (song, score, explanation)."""
     weights = STRATEGIES.get(mode, DEFAULT_WEIGHTS)
-    scored = [(song, *score_song(user_prefs, song, weights)) for song in songs]
-    ranked = sorted(scored, key=lambda item: item[1], reverse=True)
-    top_k = ranked[:k]
-    return [(song, score, ", ".join(reasons)) for song, score, reasons in top_k]
+    pool = [[song, *score_song(user_prefs, song, weights)] for song in songs]
+    selected = []
+    used_artists = set()
+
+    while pool and len(selected) < k:
+        best_index = None
+        best_effective_score = None
+        for i, (song, score, reasons) in enumerate(pool):
+            penalized = song["artist"] in used_artists
+            effective_score = score - diversity_penalty if penalized else score
+            if best_effective_score is None or effective_score > best_effective_score:
+                best_index, best_effective_score = i, effective_score
+
+        song, score, reasons = pool.pop(best_index)
+        if diversity_penalty and song["artist"] in used_artists:
+            score -= diversity_penalty
+            reasons = reasons + [f"diversity penalty, repeated artist (-{diversity_penalty:.1f})"]
+        selected.append((song, score, ", ".join(reasons)))
+        used_artists.add(song["artist"])
+
+    return selected

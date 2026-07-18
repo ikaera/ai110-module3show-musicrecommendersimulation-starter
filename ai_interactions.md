@@ -51,3 +51,28 @@ I asked the assistant (Claude, in this chat) to brainstorm a design pattern for 
 - `score_song(user_prefs, song, weights=None)` reads every point value from the `weights` dict (`w["genre"]`, `w["energy"]`, etc.) instead of hardcoded numbers — this is the "strategy" being injected.
 - `recommend_songs(user_prefs, songs, k=5, mode="balanced")` looks up `STRATEGIES[mode]` and passes it into `score_song` for every song — this is where the caller picks which strategy to use.
 - `src/main.py` demonstrates switching: it runs the same "Deep Intense Rock" profile through all 4 modes in a loop (`for mode in STRATEGIES:`) and prints each ranking, so the rankings visibly reorder based on which strategy is active.
+
+---
+
+## Diversity Penalty (Challenge 3)
+
+> Document the prompt used to design the diversity/fairness rule and what came out of it.
+
+**What task did you give the agent?**
+
+Add a "Diversity Penalty" so the recommender doesn't fill the top results with multiple songs from the same artist.
+
+**Prompt used:**
+
+"In `src/recommender.py`, `recommend_songs` currently just sorts every song by its `score_song` result and returns the top k — it can return multiple songs from the same artist. Add a diversity penalty: while building the top-k list, if a candidate song's artist is already present in the songs picked so far, subtract a `diversity_penalty` amount from that candidate's score before deciding the next pick. This has to be a real re-ranking step, not a post-filter — recompute the best remaining candidate each time a song is picked, since the penalty only applies to songs whose artist is already selected, not the whole catalog. Keep it backward-compatible: default `diversity_penalty` to `0.0` so existing calls behave exactly as before. Also append a reason like 'diversity penalty, repeated artist (-1.5)' to the explanation list when the penalty was actually applied to the picked song."
+
+**What did the agent generate or change?**
+
+- `recommend_songs` in `src/recommender.py` now takes a `diversity_penalty: float = 0.0` parameter and builds the top-k list greedily: each round it picks whichever remaining song has the highest *effective* score (score minus the penalty, only if that song's artist is already in the picked list), then adds that artist to a `used_artists` set for the next round.
+- `src/main.py` runs the "Chill Lofi" profile twice — once with `diversity_penalty=0.0`, once with `2.0` — to show the effect side by side.
+
+**What did you verify or fix manually?**
+
+- First run had a bug: even with `diversity_penalty=0.0` (the default, meaning "off"), the code still appended a `"diversity penalty, repeated artist (-0.0)"` reason to any song that happened to share an artist with an earlier pick. I caught this by reading the actual terminal output and noticing the note showing up when it shouldn't have. Fixed by requiring `diversity_penalty` to be truthy (nonzero) before applying or reporting the penalty, not just checking if the artist was reused.
+- Re-ran and confirmed: without the penalty, `LoRoom` takes 2 of the top 5 spots for "Chill Lofi" (`Midnight Coding`, `Focus Flow`). With `diversity_penalty=2.0`, `Focus Flow` drops out of the top 5 entirely and is replaced by `Wildflower Trail` (a different artist) — the re-ranking is working as intended.
+- Ran `pytest` — both existing tests still pass, since they don't use the new parameter and the default keeps old behavior unchanged.
