@@ -341,15 +341,11 @@ Notable: `genre: "grunge"` doesn't exist in the catalog, so genre and mood check
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
+- It only works on a small, 38-song catalog, and most genres only have 1-2 songs, so a "genre match" isn't much of a real contest.
+- It does not understand lyrics, language, or listening history — everything is based on the song's own numeric/categorical traits.
+- It can over-favor genre over mood: testing showed a genre-matching song can outrank a song that actually matches the user's stated mood.
 
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+Full details and evidence are in the model card: [**model_card.md**](model_card.md), sections 6 and 7.
 
 ---
 
@@ -359,7 +355,4 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+Recommenders like this one turn data into predictions by comparing two simple things: a song's own traits, and what a user says they want, then doing basic math on the gap between them. There's no "understanding" of music happening — it's arithmetic dressed up as taste. Bias shows up quickly in a system like this: with only 1-2 songs per genre, a "match" is often just "the only song we have," not a real recommendation earned by fit. See `model_card.md` for the full personal reflection (section 9) and evaluation writeup (section 7).
