@@ -113,6 +113,8 @@ _Prompts:_
 - **A "filter bubble" toward generic songs.** ("Filter bubble" = when a system keeps showing similar, safe results instead of a variety.) When a user's genre or mood doesn't exist in the catalog at all, the system falls back to comparing only energy and valence (happy/sad-ness). This quietly favors songs with _average_, middle-of-the-road energy and mood over songs with a bold, distinctive vibe — so unusual tastes get pushed toward "safe" songs instead of the songs that might actually stand out.
 - **Some song traits are ignored entirely.** The scoring never looks at `danceability` (how easy a song is to dance to) or `tempo_bpm` (how fast the song is, in beats per minute). Two users who only differ on "I want something fast" vs. "I want something slow" will get the exact same recommendations today.
 
+**Fairness fix already built in: the diversity penalty.** To fight the "same artist keeps showing up" problem above, `recommend_songs` takes an optional `diversity_penalty` value. Instead of just sorting once, it picks songs one at a time — each time it picks one, any remaining song by that same artist gets its score docked before the next pick. This spreads recommendations across more artists instead of letting one artist's whole catalog fill the list. Tested on "Chill Lofi": without the penalty, `LoRoom` took 2 of the top 5 spots; with `diversity_penalty=2.0`, `LoRoom`'s second song dropped out and was replaced by a different artist. It's off by default (`0.0`) so it doesn't change existing behavior unless a caller opts in.
+
 ---
 
 ## 7. Evaluation
@@ -163,7 +165,7 @@ _Prompts:_
 - _Handling more complex user tastes_
 
 - **Add more preferences:** let users state a target `tempo_bpm` (song speed) or `danceability`, so the system isn't blind to those traits.
-- **Add a diversity penalty:** ("diversity penalty" = subtracting points to avoid repeating the same artist or genre too many times) so the top 5 doesn't feel repetitive.
+- **Extend the diversity penalty to genre, not just artist:** it currently only stops repeated *artists* — a future version could also dock repeated *genres*, so the top 5 spreads across styles too.
 - **Balance mood against genre:** testing showed mood can get completely overridden by genre + energy, even when mood is the more important signal for the user. Worth experimenting with a higher mood weight or a "mood must match" hard filter.
 
 ---
@@ -181,4 +183,4 @@ _Prompts:_
 - **Biggest learning moment:** watching the "Energetic but Sad" test pick a happy-sounding rock song over one that actually matched the sad mood. It showed me that a recommender can do _exactly_ what it was programmed to do and still feel "wrong" to a person — the code wasn't buggy, the weights just didn't match human intuition.
 - **How AI tools helped, and where I double-checked them:** the AI assistant sped up writing the CSV-loading and scoring code, and caught a Windows terminal encoding issue I wouldn't have noticed right away. But I still had to manually verify the _math_ behind the energy-closeness formula actually rewarded "near the target" instead of just "higher is better" — running the code and reading real output was the only way to confirm that, not just trusting that it looked correct.
 - **What surprised me about simple algorithms:** a handful of `if` checks and one distance formula can still _feel_ like a real, thoughtful recommendation. It made me realize a lot of what feels like "AI magic" in real music apps might just be well-tuned weighted scoring, not something mysterious.
-- **What I'd try next:** add the diversity penalty and test with a much bigger catalog that has more than 1–2 songs per genre, so genre matches become real competition instead of a default win.
+- **What I'd try next:** extend the diversity penalty to genre as well as artist, and test with a much bigger catalog that has more than 1–2 songs per genre, so genre matches become real competition instead of a default win.
