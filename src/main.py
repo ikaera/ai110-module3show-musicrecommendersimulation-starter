@@ -9,7 +9,7 @@ You will implement the functions in recommender.py:
 - recommend_songs
 """
 
-from .recommender import load_songs, recommend_songs
+from .recommender import load_songs, recommend_songs, STRATEGIES
 
 PROFILES = {
     "High-Energy Pop": {"genre": "pop", "mood": "happy", "energy": 0.9, "valence": 0.85, "likes_acoustic": False},
@@ -38,6 +38,16 @@ def main() -> None:
         recommendations = recommend_songs(user_prefs, songs, k=k)
         print(f"\n=== Profile: {name} ===")
         print(f"Top {k} for {user_prefs}:\n")
+        for i, (song, score, explanation) in enumerate(recommendations, start=1):
+            print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
+            print(f"   Because: {explanation}")
+            print()
+
+    # Challenge 2: same profile, ranked under each scoring mode (Strategy pattern)
+    mode_demo_profile = PROFILES["Deep Intense Rock"]
+    for mode in STRATEGIES:
+        recommendations = recommend_songs(mode_demo_profile, songs, k=3, mode=mode)
+        print(f"\n=== Mode: {mode} (profile: Deep Intense Rock) ===\n")
         for i, (song, score, explanation) in enumerate(recommendations, start=1):
             print(f"{i}. {song['title']} by {song['artist']} - Score: {score:.2f}")
             print(f"   Because: {explanation}")

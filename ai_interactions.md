@@ -39,12 +39,15 @@ Challenge 1 (Add Advanced Song Features): add 7+ new song attributes not in the 
 
 **Which design pattern did you use?**
 
-<!-- e.g., Strategy, Factory, Observer, etc. -->
+**Strategy pattern.** Instead of building 4 separate scoring functions (a lot of duplicated logic), the actual scoring *algorithm shape* stays exactly the same — same checks, same order — but the *weights* used inside it become a swappable object. Each "mode" (Genre-First, Mood-First, Energy-Focused, Balanced) is really just a different weights dictionary, not different code.
 
 **How did AI help you brainstorm or implement it?**
 
-<!-- Describe the conversation or suggestions that led to your decision -->
+I asked the assistant (Claude, in this chat) to brainstorm a design pattern for "4 or more ranking strategies... that keeps your code modular," attaching the existing `recommender.py`. It proposed the Strategy pattern specifically because the four modes only ever differ by *point values*, never by which checks run or how they're combined — so the smallest correct change was parameterizing `score_song`'s hardcoded constants into a `weights` dict, rather than writing 4 near-duplicate functions (which would have violated DRY and been harder to keep in sync). It proposed the concrete shape: a `DEFAULT_WEIGHTS` dict, a `STRATEGIES` dict of named weight overrides built with dict-unpacking (`{**DEFAULT_WEIGHTS, "genre": 4.0, ...}`), and a `mode` parameter threaded through `recommend_songs` → `score_song`.
 
 **How does the pattern appear in your final code?**
 
-<!-- Point to the relevant class or method -->
+- `DEFAULT_WEIGHTS` and `STRATEGIES` in `src/recommender.py` (right before `score_song`) define the 4 strategies: `balanced`, `genre_first`, `mood_first`, `energy_focused`.
+- `score_song(user_prefs, song, weights=None)` reads every point value from the `weights` dict (`w["genre"]`, `w["energy"]`, etc.) instead of hardcoded numbers — this is the "strategy" being injected.
+- `recommend_songs(user_prefs, songs, k=5, mode="balanced")` looks up `STRATEGIES[mode]` and passes it into `score_song` for every song — this is where the caller picks which strategy to use.
+- `src/main.py` demonstrates switching: it runs the same "Deep Intense Rock" profile through all 4 modes in a loop (`for mode in STRATEGIES:`) and prints each ranking, so the rankings visibly reorder based on which strategy is active.
